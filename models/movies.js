@@ -14,6 +14,9 @@ const movies = mongoose.Schema({
     required: true,
     trim : true,
     lowercase:true
+  },
+  image:{
+      type:String
   }
 })
 

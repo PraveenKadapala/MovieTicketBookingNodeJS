@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
-const locations = mongoose.Schema({
+const { Schema } = mongoose;
+const locations = new Schema({
   location: {
     type: String,
     required: true,
     trim: true,
     lowercase:true
+  },
+  image:{
+    type: String
   }
 })
 

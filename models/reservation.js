@@ -6,40 +6,44 @@ const reservation = new mongoose.Schema({
 //     type: Date,
 //     required: true,
 //   },
-  seats: {
-    type: String,
-    required: true,
+  email:{
+    type: String
   },
-  ticketPrice: {
+  name:{
+    type: String
+  },
+  seats_booked: {
     type: Number,
     required: true,
   },
-//   total: {
-//     type: Number,
-//     required: true,
-//   },
+  seats:{
+      type: String,
+      required :true
+  },
+  showtiming:{
+    type: String,
+    required: true,
+  },
   theater: {
     type: String,
-    ref: 'Cinema',
     required: true,
   },
   movie: {
     type: String,
-    ref: 'Movie',
     required: true,
-  }
-//   username: {
-//     type: String,
-//     required: true,
-//   },
-//   phone: {
-//     type: String,
-//     required: true,
-//   },
-//   checkin: {
-//     type: Boolean,
-//     default: false,
-//   },
+  } , 
+  location: {
+    type: String,
+    required: true,
+  } , 
+  ticketprice: {
+    type: Number,
+    required: true,
+  },
+  totalamount: {
+    type: Number,
+    required: true,
+  },
 });
 
 module.exports= mongoose.model('reservation', reservation);

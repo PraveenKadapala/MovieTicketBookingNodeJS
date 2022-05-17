@@ -6,6 +6,7 @@ const locationrouter=require("./routes/locations")
 const movierouter=require("./routes/movies")
 const theaterrouter=require("./routes/theaters")
 const showtimerouter = require('./routes/showtime');
+const reservationrouter = require("./routes/reservation");
 const url="mongodb://localhost/users"
 const cors=require("cors")
 
@@ -20,6 +21,7 @@ app.use("/location", locationrouter)
 app.use("/movie", movierouter)
 app.use("/theater", theaterrouter)
 app.use("/showtime", showtimerouter)
+app.use("/reservation", reservationrouter)
 
 mongoose.connection.on('open' , ()=>{
      console.log("connected...")

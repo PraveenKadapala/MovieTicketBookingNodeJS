@@ -13,7 +13,16 @@ const theaters = mongoose.Schema({
     required: true,
     trim : true,
     lowercase:true
+  },
+  location:{
+    type: String,
+    required: true,
+    lowercase:true
+  },
+  image:{
+      type: String,
   }
+
 })
 
 module.exports = mongoose.model('theaters' , theaters)
