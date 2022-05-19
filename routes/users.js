@@ -6,7 +6,8 @@ const auth=require("../middlewares/auth")
 const jwt=require("jsonwebtoken")
 const usermodel=require("../models/usermodel")
 const secretkey="jadgfahbnab%dnalhfl#abf%jl@abljf"
-
+const refreshkey="siugsbgksbgsbgsbgs"
+const refreshtokens=[]
 
 router.post("/login" , async(req,res) =>{
     const email = req.body.email
@@ -16,8 +17,11 @@ router.post("/login" , async(req,res) =>{
             bcrypt.compare(password ,existuser.password, function(err , response){
                 if(!err){
                     if(response){
-                        const token= jwt.sign({_id:existuser._id , email:existuser.email}, secretkey, {expiresIn:'1h'})
-                        res.json({status:'ok', data:{token , response , existuser}})
+                        const token= jwt.sign({_id:existuser._id , email:existuser.email}, secretkey, {expiresIn:'20s'})
+                        const refreshtoken=jwt.sign({_id:existuser._id , email:existuser.email}, refreshkey, {expiresIn:'1h'})
+                        refreshtokens.push(refreshtoken)
+                        console.log(token,"Accesstoken")
+                        res.json({status:'ok', data:{token ,refreshtoken, response , existuser}})
                     }else if(!response){
                         res.json({status:'False' , data:"Enter correct password"})
                     }
@@ -30,7 +34,22 @@ router.post("/login" , async(req,res) =>{
    }).catch(err=>{
         res.josn({status:"Error" , data:"Something went wrong"}) 
     })
+})
 
+router.post("/renewaccesstoken", async(req,res)=>{
+    const refreshtoken=req.body.refreshtoken
+    if(!refreshtoken || !refreshtokens.includes(refreshtoken)){
+        return res.json({status:"False",message:"User not Authenticated"})
+    }
+    jwt.verify(refreshtoken,refreshkey, (err,user)=>{
+        if(!err){
+            const accesstoken= jwt.sign({_id:user._id , email:user.email}, secretkey, {expiresIn:'20s'})
+            console.log(accesstoken,"renewaccesstoken")
+            res.json({status:'ok', data:{accesstoken, user}})
+        }else{
+            return res.json({status:"False",message:"User not Authenticated"})
+        }
+    })
 })
 router.get("/home" , auth.verifytoken , async(req,res)=>{
 
@@ -72,7 +91,7 @@ router.post('/signup', async(req,res) => {
         }
     })
 })
-router.get('/allusers', async (req, res) => {
+router.get('/allusers',auth.enhance , async (req, res) => {
     try {
       const user = await usermodel.find({});
       res.send(user);
@@ -80,7 +99,7 @@ router.get('/allusers', async (req, res) => {
         res.json({status:'error' ,data: "Error Occured 1"});
     }
   });
-  router.put('/updateuserrole/:email' , async (req, res) => {
+  router.put('/updateuserrole/:email',auth.enhance , async (req, res) => {
 
     try{
     const user = await usermodel.find({email:req.params.email})
@@ -99,6 +118,16 @@ router.get('/allusers', async (req, res) => {
       res.json({status:'error' ,data: "Error Occured in updating role"});
   }
   });
+  router.delete('/deleteuser/:email',auth.enhance , async (req, res) => {
+    try{
+        usermodel.deleteMany({email:req.params.email}).then(result=>{
+            res.json({status:"ok" ,message:"Deleted Successfully", data:result})
+        })
+    }
+    catch(err){
+        res.send('error'+err)
+    }
+  })
 
 
 

@@ -1,9 +1,10 @@
 const express = require('express');
 const reservation = require('../models/reservation');
+const auth = require('../middlewares/auth');
 
 const router = new express.Router();
 
-router.put('/updatereservationdetails/:id' , async (req, res) => {
+router.put('/updatereservationdetails/:id', async (req, res) => {
 
   try{
   const user = await reservation.findById(req.params.id)
@@ -29,7 +30,7 @@ router.get('/allreservations', async (req, res) => {
   }
 });
 
-router.get('/getreservationdetails/:id' , async (req, res) => {
+router.get('/getreservationdetails/:id', async (req, res) => {
     try {
         const reservations_list = await reservation.find({_id : req.params.id})
       if (!reservations_list) {
@@ -42,7 +43,7 @@ router.get('/getreservationdetails/:id' , async (req, res) => {
     }
   });
 
-  router.get('/getreservationbyemail/:email' , async (req, res) => {
+  router.get('/getreservationbyemail/:email', async (req, res) => {
     try {
         const reservations= await reservation.find({email : req.params.email})
       if (!reservations) {
@@ -54,7 +55,7 @@ router.get('/getreservationdetails/:id' , async (req, res) => {
         res.json({status:'error' ,data: "Error Occured in reservations"});
     }
   });
-  router.delete('/deletereservation/:location/:movie/:theater/:showtiming/:seats', async (req, res) => {
+  router.delete('/deletereservation/:location/:movie/:theater/:showtiming/:seats',auth.enhance, async (req, res) => {
     try{
         reservation.deleteMany({movie:req.params.movie,location:req.params.location,theater:req.params.theater,showtiming:req.params.showtiming,seats:req.params.seats}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -64,7 +65,7 @@ router.get('/getreservationdetails/:id' , async (req, res) => {
         res.send('error'+err)
     }
   })
-  router.delete('/deletereservation/:location/:movie/:theater/:showtiming', async (req, res) => {
+  router.delete('/deletereservation/:location/:movie/:theater/:showtiming',auth.enhance, async (req, res) => {
     try{
         reservation.deleteMany({movie:req.params.movie,location:req.params.location,theater:req.params.theater,showtiming:req.params.showtiming}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -74,7 +75,7 @@ router.get('/getreservationdetails/:id' , async (req, res) => {
         res.send('error'+err)
     }
   })
-  router.delete('/deletereservation/:location/:movie/:theater', async (req, res) => {
+  router.delete('/deletereservation/:location/:movie/:theater',auth.enhance, async (req, res) => {
     try{
         reservation.deleteMany({movie:req.params.movie,location:req.params.location,theater:req.params.theater}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -84,7 +85,7 @@ router.get('/getreservationdetails/:id' , async (req, res) => {
         res.send('error'+err)
     }
   })
-  router.delete('/deletereservation/:location/:movie', async (req, res) => {
+  router.delete('/deletereservation/:location/:movie',auth.enhance, async (req, res) => {
     try{
         reservation.deleteMany({movie:req.params.movie,location:req.params.location}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -94,7 +95,7 @@ router.get('/getreservationdetails/:id' , async (req, res) => {
         res.send('error'+err)
     }
   })
-  router.delete('/deletereservation/:location', async (req, res) => {
+  router.delete('/deletereservation/:location',auth.enhance, async (req, res) => {
     try{
         reservation.deleteMany({location:req.params.location}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})

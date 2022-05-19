@@ -6,7 +6,7 @@ const auth = require('../middlewares/auth');
 const router = new express.Router();
 
 
-router.post('/addlocation', async (req, res) => {
+router.post('/addlocation',auth.enhance, async (req, res) => {
 
     const locationdetails = {
         location : req.body.location,
@@ -60,7 +60,7 @@ router.post('/searchlocation', async (req, res) => {
         res.json({status:'error' ,data: "Error Occured 1"});
     }
   });
-  router.delete('/deletelocation/:location', async (req, res) => {
+  router.delete('/deletelocation/:location',auth.enhance, async (req, res) => {
     try{
         locations.deleteOne({location:req.params.location}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})

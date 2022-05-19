@@ -5,7 +5,7 @@ const auth = require('../middlewares/auth');
 
 const router = new express.Router();
 
-router.post('/addmovie', async (req, res) => {
+router.post('/addmovie',auth.enhance, async (req, res) => {
 
     const moviedetails = {
          title : req.body.title,
@@ -73,7 +73,7 @@ router.post('/searchmovie', async (req, res) => {
     }
   });
   
-  router.delete('/deletemovie/:location', async (req, res) => {
+  router.delete('/deletemovie/:location',auth.enhance, async (req, res) => {
     try{
         movies.deleteMany({location:req.params.location}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -83,7 +83,7 @@ router.post('/searchmovie', async (req, res) => {
         res.send('error'+err)
     }
   })
-  router.delete('/deletemovie/:location/:title', async (req, res) => {
+  router.delete('/deletemovie/:location/:title',auth.enhance, async (req, res) => {
     try{
         movies.deleteMany({title:req.params.title,location:req.params.location}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})

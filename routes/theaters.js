@@ -6,7 +6,7 @@ const auth = require('../middlewares/auth');
 const router = new express.Router();
 
 
-router.post('/addtheater', async (req, res) => {
+router.post('/addtheater',auth.enhance, async (req, res) => {
 
     const theaterdetails = {
         theater : req.body.theater,
@@ -74,7 +74,7 @@ router.post('/searchtheater', async (req, res) => {
         res.json({status:'error' ,data: "Error Occured 2"});
     }
   });
-  router.delete('/deletetheater/:location/:title', async (req, res) => {
+  router.delete('/deletetheater/:location/:title',auth.enhance, async (req, res) => {
     try{
         theaters.deleteMany({title:req.params.title,location:req.params.location}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -84,7 +84,7 @@ router.post('/searchtheater', async (req, res) => {
         res.send('error'+err)
     }
   })
-  router.delete('/deletetheater/:location', async (req, res) => {
+  router.delete('/deletetheater/:location',auth.enhance, async (req, res) => {
     try{
         theaters.deleteMany({location:req.params.location}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -94,7 +94,7 @@ router.post('/searchtheater', async (req, res) => {
         res.send('error'+err)
     }
   })
-  router.delete('/deletetheater/:location/:title/:theater', async (req, res) => {
+  router.delete('/deletetheater/:location/:title/:theater',auth.enhance, async (req, res) => {
     try{
         theaters.deleteMany({title:req.params.title,location:req.params.location,theater:req.params.theater}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})

@@ -5,20 +5,20 @@ const secretkey="jadgfahbnab%dnalhfl#abf%jl@abljf"
 
 const verifytoken= (req,res,next) =>{
     if(!req.headers.authorization){
-        res.json({status:"error" , data:"Unauthorized request"})
+        return res.json({status:"notoken" , data:"Unauthorized request"})
       }
     const token = req.headers.authorization.split(" ")[1]
     console.log("Token is" , token)
 
     if(!token){
-        res.status(403).send("Token is required for authentication") 
+       return res.status(403).send("Token is required for authentication") 
     }else{
         try{
         const decodedtoken=jwt.verify(token , secretkey)
         req.decodedtoken= decodedtoken
         }
     catch{
-        res.json({status:"error" , data:"Something went wrong"})
+        return res.json({status:"error" , data:"Something went wrong"})
         }  
     }
     return next(); 
@@ -26,7 +26,7 @@ const verifytoken= (req,res,next) =>{
 const enhance = async (req, res, next) => {
     try {
       if(!req.headers.authorization){
-        res.json({status:"error" , data:"Unauthorized request"})
+        return res.json({status:"error" , data:"Unauthorized request"})
       }
       const token =  req.headers.authorization.split(' ')[1]
       const decoded = jwt.verify(token, secretkey);
@@ -35,12 +35,16 @@ const enhance = async (req, res, next) => {
         email: decoded.email,
       });
       console.log(user,"Admin user")
-      if (!user || user.role !== 'admin') throw new Error();
+      if (!user ){
+        return res.json({status:"error" , data:"Unauthorized request"})
+      }if(user.role !== 'admin'){
+        return res.json({status:"notadmin" , data:"Unauthorized request"})
+      }
       req.token = token;
       req.user = user;
       next();
     } catch (e) {
-        res.json({status:"error" , data:"Error Occured in Authentication"})
+        return res.json({status:"error" , data:"Error Occured in Authentication"})
     }
   };
 

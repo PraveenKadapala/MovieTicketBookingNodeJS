@@ -7,7 +7,7 @@ const { range } = require('express/lib/request');
 
 const router = new express.Router();
 
-router.post('/addshowtime', async (req, res) => {
+router.post('/addshowtime',auth.enhance, async (req, res) => {
 
     const showtimedetails = {
         showtiming : req.body.showtiming,
@@ -37,7 +37,7 @@ router.get('/allshows', async (req, res) => {
   }
 });
 
-router.get('/getshow/:id' , async (req, res) => {
+router.get('/getshow/:id', async (req, res) => {
     try {
         const shows_list = await showtime.find({_id : req.params.id})
       if (!shows_list) {
@@ -76,7 +76,7 @@ router.get('/getshowtiming/:movie/:theater/:location/:showtiming', async (req, r
         res.json({status:'error' ,data: "Error Occured 2"});
     }
   });
-  router.delete('/deleteshowtime/:location/:movie/:theater/:showtiming', async (req, res) => {
+  router.delete('/deleteshowtime/:location/:movie/:theater/:showtiming',auth.enhance, async (req, res) => {
     try{
         showtime.deleteMany({movie:req.params.movie,location:req.params.location,theater:req.params.theater,showtiming:req.params.showtiming}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -86,7 +86,7 @@ router.get('/getshowtiming/:movie/:theater/:location/:showtiming', async (req, r
         res.send('error'+err)
     }
   })
-  router.delete('/deleteshowtime/:location', async (req, res) => {
+  router.delete('/deleteshowtime/:location',auth.enhance, async (req, res) => {
     try{
         showtime.deleteMany({location:req.params.location}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -96,7 +96,7 @@ router.get('/getshowtiming/:movie/:theater/:location/:showtiming', async (req, r
         res.send('error'+err)
     }
   })
-  router.delete('/deleteshowtime/:location/:movie/:theater', async (req, res) => {
+  router.delete('/deleteshowtime/:location/:movie/:theater',auth.enhance, async (req, res) => {
     try{
         showtime.deleteMany({movie:req.params.movie,location:req.params.location,theater:req.params.theater}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
@@ -106,7 +106,7 @@ router.get('/getshowtiming/:movie/:theater/:location/:showtiming', async (req, r
         res.send('error'+err)
     }
   })
-  router.delete('/deleteshowtime/:location/:movie', async (req, res) => {
+  router.delete('/deleteshowtime/:location/:movie',auth.enhance, async (req, res) => {
     try{
         showtime.deleteMany({movie:req.params.movie,location:req.params.location}).then(result=>{
             res.json({status:"ok" ,message:"Deleted Successfully", data:result})
