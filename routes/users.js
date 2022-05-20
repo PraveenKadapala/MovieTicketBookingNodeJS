@@ -17,7 +17,6 @@ router.post("/login" , async(req,res) =>{
                     if(response){
                         const token= jwt.sign({_id:existuser._id , email:existuser.email}, "secretkey", {expiresIn:'20s'})
                         const refreshtoken=jwt.sign({_id:existuser._id , email:existuser.email}, "refreshkey", {expiresIn:'1h'})
-                        refreshtokens.push(refreshtoken)
                         console.log(token,"Accesstoken")
                         res.json({status:'ok', data:{token ,refreshtoken, response , existuser}})
                     }else if(!response){
@@ -37,7 +36,7 @@ router.post("/login" , async(req,res) =>{
 router.post("/renewaccesstoken", async(req,res)=>{
     const refreshtoken=req.body.refreshtoken
     // if(!refreshtoken || !refreshtokens.includes(refreshtoken))
-        if(!refreshtoken || !refreshtokens.includes(refreshtoken)){
+        if(!refreshtoken){
         return res.json({status:"False",message:"User not Authenticated"})
     }
     jwt.verify(refreshtoken,"refreshkey", (err,user)=>{
