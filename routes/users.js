@@ -5,8 +5,6 @@ const bcrypt=require("bcryptjs")
 const auth=require("../middlewares/auth")
 const jwt=require("jsonwebtoken")
 const usermodel=require("../models/usermodel")
-const secretkey="jadgfahbnab%dnalhfl#abf%jl@abljf"
-const refreshkey="siugsbgksbgsbgsbgs"
 const refreshtokens=[]
 
 router.post("/login" , async(req,res) =>{
@@ -17,8 +15,8 @@ router.post("/login" , async(req,res) =>{
             bcrypt.compare(password ,existuser.password, function(err , response){
                 if(!err){
                     if(response){
-                        const token= jwt.sign({_id:existuser._id , email:existuser.email}, secretkey, {expiresIn:'20s'})
-                        const refreshtoken=jwt.sign({_id:existuser._id , email:existuser.email}, refreshkey, {expiresIn:'1h'})
+                        const token= jwt.sign({_id:existuser._id , email:existuser.email}, "secretkey", {expiresIn:'20s'})
+                        const refreshtoken=jwt.sign({_id:existuser._id , email:existuser.email}, "refreshkey", {expiresIn:'1h'})
                         refreshtokens.push(refreshtoken)
                         console.log(token,"Accesstoken")
                         res.json({status:'ok', data:{token ,refreshtoken, response , existuser}})
@@ -41,7 +39,7 @@ router.post("/renewaccesstoken", async(req,res)=>{
     if(!refreshtoken || !refreshtokens.includes(refreshtoken)){
         return res.json({status:"False",message:"User not Authenticated"})
     }
-    jwt.verify(refreshtoken,refreshkey, (err,user)=>{
+    jwt.verify(refreshtoken,"refreshkey", (err,user)=>{
         if(!err){
             const accesstoken= jwt.sign({_id:user._id , email:user.email}, secretkey, {expiresIn:'20s'})
             console.log(accesstoken,"renewaccesstoken")

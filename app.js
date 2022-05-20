@@ -7,14 +7,13 @@ const movierouter=require("./routes/movies")
 const theaterrouter=require("./routes/theaters")
 const showtimerouter = require('./routes/showtime');
 const reservationrouter = require("./routes/reservation");
-const url="mongodb://localhost/users"
 const cors=require("cors")
 
 const app=express()
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect(url , {useNewUrlParser : true, useUnifiedTopology : true})
+mongoose.connect("mongodb://localhost/users" , {useNewUrlParser : true, useUnifiedTopology : true})
 
 app.use("/users" , userrouter)
 app.use("/location", locationrouter)
