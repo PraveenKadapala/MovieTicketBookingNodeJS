@@ -5,7 +5,7 @@ const bcrypt=require("bcryptjs")
 const auth=require("../middlewares/auth")
 const jwt=require("jsonwebtoken")
 const usermodel=require("../models/usermodel")
-const refreshtokens=[]
+// const refreshtokens=[]
 
 router.post("/login" , async(req,res) =>{
     const email = req.body.email
@@ -36,7 +36,8 @@ router.post("/login" , async(req,res) =>{
 
 router.post("/renewaccesstoken", async(req,res)=>{
     const refreshtoken=req.body.refreshtoken
-    if(!refreshtoken || !refreshtokens.includes(refreshtoken)){
+    // if(!refreshtoken || !refreshtokens.includes(refreshtoken))
+        if(!refreshtoken || !refreshtokens.includes(refreshtoken)){
         return res.json({status:"False",message:"User not Authenticated"})
     }
     jwt.verify(refreshtoken,"refreshkey", (err,user)=>{
