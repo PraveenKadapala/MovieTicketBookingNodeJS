@@ -1,6 +1,6 @@
 const jwt=require("jsonwebtoken")
 const User=require('./models/usermodel')
-const secretkey="jadgfahbnab%dnalhfl#abf%jl@abljf"
+// const secretkey="jadgfahbnab%dnalhfl#abf%jl@abljf"
 
 const verifytoken= (req,res,next) =>{
     const token = req.headers.authorization.split(" ")[1]
@@ -10,7 +10,7 @@ const verifytoken= (req,res,next) =>{
         res.status(403).send("Token is required for authentication") 
     }else{
         try{
-        const decodedtoken=jwt.verify(token , secretkey)
+        const decodedtoken=jwt.verify(token , "secretkey")
         req.decodedtoken= decodedtoken
         }
     catch{

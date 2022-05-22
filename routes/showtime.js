@@ -3,7 +3,7 @@ const express = require('express');
 const showtime = require('../models/showtime');
 const reservations =require('../models/reservation');
 const auth = require('../middlewares/auth');
-const { range } = require('express/lib/request');
+// const { range } = require('express/lib/request');
 
 const router = new express.Router();
 
