@@ -23,8 +23,7 @@ const userdetails= mongoose.Schema({
     },
     role:{
         type: String,
-        // default:"guest",
-        // enum: ["guest","admin"]
+        default:"guest"
     }
 })
 

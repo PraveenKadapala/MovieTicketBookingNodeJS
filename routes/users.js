@@ -55,6 +55,7 @@ router.get("/home" , auth.verifytoken , async(req,res)=>{
         res.json({status:"ok" , data:"ok"})
     }
 })
+
 router.get("/adminhome" , auth.enhance , async(req,res)=>{
 
     if(req && req.token){
@@ -68,7 +69,7 @@ router.post('/signup', async(req,res) => {
         phoneno:req.body.phoneno,
         email : req.body.email,
         password : req.body.password,
-        role:"guest"
+        role:req.body.role
     }
     const salt = await bcrypt.genSalt(10)       
     await bcrypt.hash(req.body.password , salt).then(hashedPassword => {
