@@ -15,8 +15,8 @@ router.post("/login" , async(req,res) =>{
             bcrypt.compare(password ,existuser.password, function(err , response){
                 if(!err){
                     if(response){
-                        const token= jwt.sign({_id:existuser._id , email:existuser.email}, "secretkey", {expiresIn:'20s'})
-                        const refreshtoken=jwt.sign({_id:existuser._id , email:existuser.email}, "refreshkey", {expiresIn:'1h'})
+                        const token= jwt.sign({_id:existuser._id , email:existuser.email}, "secretkey", {expiresIn:'1h'})
+                        const refreshtoken=jwt.sign({_id:existuser._id , email:existuser.email}, "refreshkey", {expiresIn:'24h'})
                         console.log(token,"Accesstoken")
                         res.json({status:'ok', data:{token ,refreshtoken, response , existuser}})
                     }else if(!response){
@@ -41,7 +41,7 @@ router.post("/renewaccesstoken", async(req,res)=>{
     }
     jwt.verify(refreshtoken,"refreshkey", (err,user)=>{
         if(!err){
-            const accesstoken= jwt.sign({_id:user._id , email:user.email}, "secretkey", {expiresIn:'20s'})
+            const accesstoken= jwt.sign({_id:user._id , email:user.email}, "secretkey", {expiresIn:'1h'})
             console.log(accesstoken,"renewaccesstoken")
             res.json({status:'ok', data:{accesstoken, user}})
         }else{
@@ -92,12 +92,13 @@ router.post('/signup', async(req,res) => {
 })
 router.get('/allusers',auth.enhance , async (req, res) => {
     try {
-      const user = await usermodel.find({});
+      const user = await usermodel.find();
       res.send(user);
     } catch (err) {
         res.json({status:'error' ,data: "Error Occured 1"});
     }
   });
+
   router.put('/updateuserrole/:email',auth.enhance , async (req, res) => {
 
     try{
